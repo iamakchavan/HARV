@@ -1,5 +1,8 @@
 # HARV - AI Browser Assistant
 
+HARV is a powerful browser extension that brings AI-powered assistance directly into your browsing experience. With support for multiple AI models (Gemini, Perplexity, xAI), it offers intelligent page analysis, smart search, and context-aware conversations.
+
+
 > ⚠️ **Warning: Development Status**
 > 
 > This project is currently under active development and in beta stage. Some features might:
@@ -10,7 +13,7 @@
 >
 > Feel free to report issues and contribute to the development!
 
-HARV is a powerful browser extension that brings AI-powered assistance directly into your browsing experience. With support for multiple AI models (Gemini, Perplexity, xAI), it offers intelligent page analysis, smart search, and context-aware conversations.
+
 
 ## Features
 
@@ -43,7 +46,7 @@ HARV is a powerful browser extension that brings AI-powered assistance directly 
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/harv.git
+   git clone https://github.com/iamakchavan/harv.git
    cd harv
    ```
 
