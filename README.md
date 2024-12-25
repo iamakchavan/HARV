@@ -1,4 +1,4 @@
-# HARV - AI Browser Assistant
+# <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/extension_icon%20(4)-6Wye0wySEvOe9CE7mSoAVG5mEWUqc7.png" alt="HARV Logo" width="32" height="32" style="vertical-align: middle; margin-right: 10px;"> HARV - AI Browser Assistant
 
 HARV is a powerful browser extension that brings AI-powered assistance directly into your browsing experience. With support for multiple AI models (Gemini, Perplexity, xAI), it offers intelligent page analysis, smart search, and context-aware conversations.
 
