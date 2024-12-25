@@ -126,17 +126,7 @@ project/
 └── dist/            # Build output
 ```
 
-### Development Commands
-```bash
-# Start development server
-npm run dev
 
-# Build for production
-npm run build
-
-# Run tests
-npm test
-```
 
 ## Contributing
 
