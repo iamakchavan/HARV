@@ -60,7 +60,7 @@ export const Header: React.FC<HeaderProps> = ({
           ) : isSummarized ? (
             <>
               <Check className="w-4 h-4" />
-              Summarized
+              Summarized!
             </>
           ) : (
             'Summarize'

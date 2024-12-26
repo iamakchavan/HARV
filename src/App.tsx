@@ -50,6 +50,7 @@ const App: React.FC = () => {
   const handleModelChange = (model: AIModel) => {
     setSelectedModel(model);
     setAIModel(model);
+    setIsSummarized(false);
   };
 
   const getCurrentUrl = async () => {
