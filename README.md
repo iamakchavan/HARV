@@ -47,12 +47,12 @@ HARV is a powerful browser extension that brings AI-powered assistance directly 
 1. Clone the repository:
    ```bash
    git clone https://github.com/iamakchavan/harv.git
-   cd harv
+   cd HARV
    ```
 
 2. Install dependencies:
    ```bash
-   cd project
+   cd HARV
    npm install
    ```
 
