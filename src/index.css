@@ -41,49 +41,55 @@
 
   @keyframes text-pulse {
     0% {
-      background-position: 120% 50%;
+      background-position: 150% 50%;
     }
     100% {
-      background-position: -20% 50%;
+      background-position: -50% 50%;
     }
   }
 
   .animate-text-pulse {
     background-image: linear-gradient(
-      110deg,
+      90deg,
       var(--text-color) 0%,
-      var(--text-color) 25%,
-      rgba(255, 255, 255, 0.7) 45%,
-      white 50%,
-      rgba(255, 255, 255, 0.7) 55%,
-      var(--text-color) 75%,
+      var(--text-color) 35%,
+      rgba(255, 255, 255, 0.9) 42%,
+      rgba(255, 255, 255, 1) 47%,
+      rgba(255, 255, 255, 1) 53%,
+      rgba(255, 255, 255, 0.9) 58%,
+      var(--text-color) 65%,
       var(--text-color) 100%
     );
     background-size: 200% 100%;
-    animation: text-pulse 2.5s cubic-bezier(0.215, 0.610, 0.355, 1.000) infinite;
+    animation: text-pulse 2s linear infinite;
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
     --text-color: rgb(55, 65, 81);
+    font-weight: 500;
   }
 
   .dark .animate-text-pulse {
     background-image: linear-gradient(
-      110deg,
+      90deg,
       var(--text-color) 0%,
-      var(--text-color) 25%,
-      rgba(255, 255, 255, 0.7) 45%,
-      white 50%,
-      rgba(255, 255, 255, 0.7) 55%,
-      var(--text-color) 75%,
+      var(--text-color) 35%,
+      rgba(255, 255, 255, 0.9) 42%,
+      rgba(255, 255, 255, 1) 47%,
+      rgba(255, 255, 255, 1) 53%,
+      rgba(255, 255, 255, 0.9) 58%,
+      var(--text-color) 65%,
       var(--text-color) 100%
     );
     background-size: 200% 100%;
-    animation: text-pulse 2.5s cubic-bezier(0.215, 0.610, 0.355, 1.000) infinite;
+    animation: text-pulse 2s linear infinite;
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
     --text-color: rgb(156, 163, 175);
+    font-weight: 500;
   }
 
   .fixed-gradient {
