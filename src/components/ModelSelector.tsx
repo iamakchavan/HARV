@@ -18,13 +18,13 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
     {
       id: 'gemini' as AIModel,
       name: 'Gemini',
-      description: 'Powered by Google Gemini 1.5 Pro',
+      description: 'Powered by Google Gemini 1.5 Flash',
       icon: Sparkles,
     },
     {
       id: 'xai' as AIModel,
       name: 'xAI',
-      description: 'Grok Beta Model',
+      description: 'Grok-Beta Model',
       icon: Zap,
     },
     {
