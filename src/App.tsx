@@ -82,6 +82,14 @@ const App: React.FC = () => {
       const range = selection?.getRangeAt(0);
       const rect = range?.getBoundingClientRect();
 
+      // Check if selection is within header
+      const headerElement = document.querySelector('.border-b.border-gray-200');
+      const anchorNode = selection?.anchorNode;
+      if (headerElement && anchorNode && headerElement.contains(anchorNode)) {
+        setSelectionPopup(prev => ({ ...prev, visible: false }));
+        return;
+      }
+
       if (rect) {
         const windowWidth = window.innerWidth;
         const windowHeight = window.innerHeight;
