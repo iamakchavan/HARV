@@ -15,15 +15,17 @@ export const ContentSection: React.FC<ContentSectionProps> = ({ title, content }
   const ttsService = TTSService.getInstance();
 
   const renderMarkdown = (content: string) => {
-    const html = marked(content);
-    return { __html: DOMPurify.sanitize(html) };
+    const html = marked.parse(content);
+    return { __html: DOMPurify.sanitize(html as string) };
   };
 
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(content);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      setTimeout(() => {
+        setCopied(false);
+      }, 2000);
     } catch (err) {
       console.error('Failed to copy text:', err);
     }
@@ -31,12 +33,12 @@ export const ContentSection: React.FC<ContentSectionProps> = ({ title, content }
 
   const handleSpeak = async () => {
     if (isSpeaking) {
-      ttsService.stop();
+      await ttsService.stop();
       setIsSpeaking(false);
     } else {
       // Strip markdown and clean the text before speaking
       const tempDiv = document.createElement('div');
-      tempDiv.innerHTML = marked(content);
+      tempDiv.innerHTML = marked.parse(content) as string;
       const cleanText = tempDiv.textContent || '';
       
       await ttsService.speak(cleanText);

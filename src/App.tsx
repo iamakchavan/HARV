@@ -16,6 +16,7 @@ interface SearchResult {
   content: string;
   timestamp: number;
   type: 'search' | 'define' | 'elaborate';
+  images?: string[];
 }
 
 const App: React.FC = () => {
@@ -199,7 +200,8 @@ const App: React.FC = () => {
         id: Date.now().toString(),
         content: response,
         timestamp: Date.now(),
-        type: 'search'
+        type: 'search',
+        images: imagesData
       };
       setAnswers(prev => [...prev, newAnswer]);
       scrollToAnswer();
@@ -315,6 +317,24 @@ const App: React.FC = () => {
               ref={index === answers.length - 1 ? latestAnswerRef : null}
               className="answer-container animate-fade-up"
             >
+              {answer.images && answer.images.length > 0 && (
+                <div className="mb-4 overflow-x-auto">
+                  <div className="flex gap-4 py-2 min-w-min">
+                    {answer.images.map((image, imgIndex) => (
+                      <div key={imgIndex} className="relative flex-shrink-0">
+                        <img 
+                          src={image}
+                          alt={`Uploaded image ${imgIndex + 1}`}
+                          className="h-24 w-auto rounded-lg border border-gray-200 dark:border-gray-700"
+                        />
+                        <span className="absolute top-1 left-1 bg-black/50 text-white px-2 py-0.5 rounded-md text-xs font-medium">
+                          Image {imgIndex + 1}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
               <ContentSection
                 title={`Answer - ${new Date(answer.timestamp).toLocaleTimeString()}`}
                 content={answer.content}
