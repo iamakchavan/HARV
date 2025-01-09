@@ -305,7 +305,21 @@ const App: React.FC = () => {
           />
         </div>
         
-        {summary && <ContentSection title="Page Summary" content={summary} />}
+        {isSummarizing ? (
+          <div className="answer-container">
+            <div className="flex justify-between items-center mb-3">
+              <div className="h-5 w-24 bg-gray-200 dark:bg-gray-700 rounded shimmer" />
+            </div>
+            <div className="space-y-3">
+              <div className="h-4 w-full bg-gray-200 dark:bg-gray-700 rounded shimmer" />
+              <div className="h-4 w-[90%] bg-gray-200 dark:bg-gray-700 rounded shimmer" />
+              <div className="h-4 w-[95%] bg-gray-200 dark:bg-gray-700 rounded shimmer" />
+              <div className="h-4 w-[85%] bg-gray-200 dark:bg-gray-700 rounded shimmer" />
+            </div>
+          </div>
+        ) : summary && (
+          <ContentSection title="Page Summary" content={summary} />
+        )}
         
         <div ref={answerRef}>
           {loading && answerType && !answers.length && (
