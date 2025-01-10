@@ -93,7 +93,8 @@ export const ContentSection: React.FC<ContentSectionProps> = ({ title, content }
           prose-strong:text-gray-900 dark:prose-strong:text-white
           prose-code:text-gray-800 dark:prose-code:text-gray-200
           prose-code:bg-gray-100 dark:prose-code:bg-gray-800
-          prose-pre:bg-gray-100 dark:prose-pre:bg-gray-800"
+          prose-pre:bg-gray-100 dark:prose-pre:bg-gray-800
+          content-fade-in"
         dangerouslySetInnerHTML={renderMarkdown(content)}
       />
     </div>
