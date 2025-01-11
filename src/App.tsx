@@ -9,6 +9,7 @@ import { AnswerAnimation } from './components/AnswerAnimation';
 import { FloatingSearch } from './components/FloatingSearch';
 import { ModelSelector, type AIModel } from './components/ModelSelector';
 import { setAIModel } from './utils/ai';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Browser from 'webextension-polyfill';
 
 interface SearchResult {
@@ -42,6 +43,14 @@ const App: React.FC = () => {
     text: '',
     visible: false
   });
+  const [selectedImagePreview, setSelectedImagePreview] = useState<string | null>(null);
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
+  const [scale, setScale] = useState(1);
+  const [isDoubleTapped, setIsDoubleTapped] = useState(false);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [currentImages, setCurrentImages] = useState<string[]>([]);
 
   const answerRef = useRef<HTMLDivElement>(null);
   const searchAnswerRef = useRef<HTMLDivElement>(null);
@@ -221,13 +230,88 @@ const App: React.FC = () => {
     }
   };
 
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (scale > 1) {
+      setIsDragging(true);
+      setDragStart({
+        x: e.clientX - position.x,
+        y: e.clientY - position.y
+      });
+    }
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (isDragging && scale > 1) {
+      setPosition({
+        x: e.clientX - dragStart.x,
+        y: e.clientY - dragStart.y
+      });
+    }
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleImageClick = (image: string, index: number, images: string[]) => {
+    setSelectedImagePreview(image);
+    setSelectedImageIndex(index);
+    setCurrentImages(images);
+    setScale(1);
+    setIsDoubleTapped(false);
+    setPosition({ x: 0, y: 0 });
+  };
+
+  const handleWheel = (e: React.WheelEvent) => {
+    if (e.ctrlKey) {
+      e.preventDefault();
+      const delta = e.deltaY * -0.01;
+      setScale(prevScale => Math.min(Math.max(0.5, prevScale + delta), 3));
+    }
+  };
+
+  const handleDoubleClick = () => {
+    setIsDoubleTapped(!isDoubleTapped);
+    setScale(isDoubleTapped ? 1 : 2);
+  };
+
+  const handleKeyDown = (e: KeyboardEvent, images: string[]) => {
+    if (selectedImagePreview) {
+      if (e.key === 'ArrowLeft' && selectedImageIndex > 0) {
+        setSelectedImageIndex(prev => prev - 1);
+        setSelectedImagePreview(images[selectedImageIndex - 1]);
+        setScale(1);
+      } else if (e.key === 'ArrowRight' && selectedImageIndex < images.length - 1) {
+        setSelectedImageIndex(prev => prev + 1);
+        setSelectedImagePreview(images[selectedImageIndex + 1]);
+        setScale(1);
+      } else if (e.key === 'Escape') {
+        setSelectedImagePreview(null);
+        setScale(1);
+      }
+    }
+  };
+
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      const currentAnswer = answers.find(answer => answer.images?.includes(selectedImagePreview || ''));
+      if (currentAnswer?.images) {
+        handleKeyDown(e, currentAnswer.images);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [selectedImagePreview, selectedImageIndex, answers]);
+
   useEffect(() => {
     const loadState = async () => {
       const tabs = await Browser.tabs.query({ active: true, currentWindow: true });
       const tabId = tabs[0]?.id;
-      if (!tabId) return;
+      const url = tabs[0]?.url;
+      if (!tabId || !url) return;
       
-      const storageKey = `tab_${tabId}`;
+      const storageKey = `tab_${url}`;
       const result = await Browser.storage.local.get([storageKey]);
       const tabData = result[storageKey];
       
@@ -241,11 +325,16 @@ const App: React.FC = () => {
             document.documentElement.classList.add('dark');
           }
         }
+        if (tabData.isSummarized !== undefined) {
+          setIsSummarized(tabData.isSummarized);
+        }
       }
     };
 
     loadState();
-    summarizeCurrentPage();
+    if (!isSummarized) {
+      summarizeCurrentPage();
+    }
     getCurrentUrl();
     document.addEventListener('mouseup', handleTextSelection);
     document.addEventListener('mousedown', handleClickOutside);
@@ -259,22 +348,23 @@ const App: React.FC = () => {
   useEffect(() => {
     const saveState = async () => {
       const tabs = await Browser.tabs.query({ active: true, currentWindow: true });
-      const tabId = tabs[0]?.id;
-      if (!tabId) return;
+      const url = tabs[0]?.url;
+      if (!url) return;
       
-      const storageKey = `tab_${tabId}`;
+      const storageKey = `tab_${url}`;
       await Browser.storage.local.set({
         [storageKey]: {
           summary,
           answers,
           searchResults,
-          darkMode
+          darkMode,
+          isSummarized
         }
       });
     };
 
     saveState();
-  }, [summary, answers, searchResults, darkMode]);
+  }, [summary, answers, searchResults, darkMode, isSummarized]);
 
   return (
     <div className={`app-container ${darkMode ? 'dark' : ''}`}>
@@ -339,7 +429,8 @@ const App: React.FC = () => {
                         <img 
                           src={image}
                           alt={`Uploaded image ${imgIndex + 1}`}
-                          className="h-24 w-auto rounded-lg border border-gray-200 dark:border-gray-700"
+                          className="h-24 w-auto rounded-lg border border-gray-200 dark:border-gray-700 cursor-pointer hover:opacity-90 transition-opacity"
+                          onClick={() => handleImageClick(image, imgIndex, answer.images || [])}
                         />
                         <span className="absolute top-1 left-1 bg-black/50 text-white px-2 py-0.5 rounded-md text-xs font-medium">
                           Image {imgIndex + 1}
@@ -393,6 +484,74 @@ const App: React.FC = () => {
         isSummarized={isSummarized}
         onSearch={handleFloatingSearch}
       />
+
+      {selectedImagePreview && (
+        <div 
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center"
+          onClick={() => {
+            setSelectedImagePreview(null);
+            setScale(1);
+          }}
+        >
+          <div className="relative max-w-[90%] max-h-[90vh] flex items-center gap-4"
+               onClick={e => e.stopPropagation()}>
+            {selectedImageIndex > 0 && (
+              <button
+                className="absolute left-4 top-1/2 -translate-y-1/2 p-2 rounded-full 
+                  bg-black/70 hover:bg-black/90 text-white transition-all z-50
+                  shadow-lg backdrop-blur-sm"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const newIndex = selectedImageIndex - 1;
+                  setSelectedImageIndex(newIndex);
+                  setSelectedImagePreview(currentImages[newIndex]);
+                  setScale(1);
+                  setPosition({ x: 0, y: 0 });
+                }}
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+            )}
+
+            <img 
+              src={selectedImagePreview} 
+              alt="Preview" 
+              className="max-w-full max-h-[90vh] rounded-lg shadow-xl animate-in fade-in select-none"
+              style={{ 
+                transform: `scale(${scale}) translate(${position.x / scale}px, ${position.y / scale}px)`,
+                transition: isDragging ? 'none' : 'transform 0.2s ease-out',
+                cursor: scale > 1 ? 'grab' : 'zoom-in',
+                userSelect: 'none'
+              }}
+              onWheel={handleWheel}
+              onDoubleClick={handleDoubleClick}
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseUp={handleMouseUp}
+              onMouseLeave={handleMouseUp}
+              draggable={false}
+            />
+
+            {selectedImageIndex < currentImages.length - 1 && (
+              <button
+                className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full 
+                  bg-black/70 hover:bg-black/90 text-white transition-all z-50
+                  shadow-lg backdrop-blur-sm"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const newIndex = selectedImageIndex + 1;
+                  setSelectedImageIndex(newIndex);
+                  setSelectedImagePreview(currentImages[newIndex]);
+                  setScale(1);
+                  setPosition({ x: 0, y: 0 });
+                }}
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
