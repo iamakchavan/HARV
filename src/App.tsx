@@ -307,12 +307,11 @@ const App: React.FC = () => {
   useEffect(() => {
     const loadState = async () => {
       const tabs = await Browser.tabs.query({ active: true, currentWindow: true });
-      const tabId = tabs[0]?.id;
       const url = tabs[0]?.url;
-      if (!tabId || !url) return;
+      if (!url) return;
       
       const storageKey = `tab_${url}`;
-      const result = await Browser.storage.local.get([storageKey]);
+      const result = await Browser.storage.session.get([storageKey]);
       const tabData = result[storageKey];
       
       if (tabData) {
@@ -352,7 +351,7 @@ const App: React.FC = () => {
       if (!url) return;
       
       const storageKey = `tab_${url}`;
-      await Browser.storage.local.set({
+      await Browser.storage.session.set({
         [storageKey]: {
           summary,
           answers,
