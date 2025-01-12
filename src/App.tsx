@@ -32,7 +32,7 @@ const App: React.FC = () => {
   const [searchScope, setSearchScope] = useState<'all' | 'domain' | 'page'>('page');
   const [isSummarizing, setIsSummarizing] = useState(false);
   const [isSummarized, setIsSummarized] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
   const [selectedModel, setSelectedModel] = useState<AIModel>('gemini');
   const [selectionPopup, setSelectionPopup] = useState<{
     position: { x: number; y: number } | null;
@@ -320,13 +320,14 @@ const App: React.FC = () => {
         if (tabData.searchResults) setSearchResults(tabData.searchResults);
         if (tabData.darkMode !== undefined) {
           setDarkMode(tabData.darkMode);
-          if (tabData.darkMode) {
-            document.documentElement.classList.add('dark');
-          }
+        } else {
+          document.documentElement.classList.add('dark');
         }
         if (tabData.isSummarized !== undefined) {
           setIsSummarized(tabData.isSummarized);
         }
+      } else {
+        document.documentElement.classList.add('dark');
       }
     };
 

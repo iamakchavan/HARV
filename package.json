@@ -13,6 +13,7 @@
     "@google/generative-ai": "^0.2.0",
     "clsx": "^2.1.1",
     "dompurify": "^3.0.9",
+    "framer-motion": "^11.17.0",
     "lucide-react": "^0.344.0",
     "marked": "^12.0.0",
     "react": "^18.3.1",
