@@ -49,7 +49,7 @@ export const Header: React.FC<HeaderProps> = ({
           className={`button-primary flex items-center gap-2 ${
             isSummarizing ? 'opacity-75 cursor-not-allowed' : ''
           } ${
-            isSummarized ? 'bg-blue-500/10 text-blue-600 hover:bg-blue-500/20 dark:bg-green-900/50 dark:text-green-400 dark:hover:bg-green-900/70' : ''
+            isSummarized ? 'bg-blue-50 hover:bg-blue-100 text-blue-600 dark:bg-green-900/50 dark:text-green-400 dark:hover:bg-green-900/70' : ''
           }`}
         >
           {isSummarizing ? (

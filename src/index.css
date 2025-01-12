@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -346,16 +347,17 @@ body {
 }
 
 .answer-container table {
-  @apply min-w-full border-collapse my-4;
+  @apply min-w-full border-collapse my-4 table-fixed;
 }
 
 .answer-container th,
 .answer-container td {
-  @apply border border-gray-200 dark:border-gray-700 px-4 py-2 whitespace-nowrap;
+  @apply border border-gray-200 dark:border-gray-700 px-4 py-2 break-words;
+  max-width: 300px;
 }
 
 .answer-container th {
-  @apply bg-gray-50 dark:bg-gray-800;
+  @apply bg-gray-50 dark:bg-gray-800 font-medium;
 }
 
 /* Custom scrollbar styling */

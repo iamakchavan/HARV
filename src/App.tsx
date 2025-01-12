@@ -11,6 +11,8 @@ import { ModelSelector, type AIModel } from './components/ModelSelector';
 import { setAIModel } from './utils/ai';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Browser from 'webextension-polyfill';
+import { WelcomeScreen } from './components/WelcomeScreen';
+import { FeaturesPage } from './components/FeaturesPage';
 
 interface SearchResult {
   id: string;
@@ -19,6 +21,10 @@ interface SearchResult {
   type: 'search' | 'define' | 'elaborate';
   images?: string[];
 }
+
+type OnboardingStep = "welcome" | "features" | "complete";
+
+const storageKey = 'harv_extension';
 
 const App: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -51,6 +57,8 @@ const App: React.FC = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [currentImages, setCurrentImages] = useState<string[]>([]);
+  const [isFirstVisit, setIsFirstVisit] = useState(true);
+  const [onboardingStep, setOnboardingStep] = useState<OnboardingStep>("welcome");
 
   const answerRef = useRef<HTMLDivElement>(null);
   const searchAnswerRef = useRef<HTMLDivElement>(null);
@@ -332,6 +340,9 @@ const App: React.FC = () => {
         if (tabData.isSummarized !== undefined) {
           setIsSummarized(tabData.isSummarized);
         }
+        if (tabData.isFirstVisit !== undefined) {
+          setIsFirstVisit(tabData.isFirstVisit);
+        }
       }
     };
 
@@ -371,16 +382,41 @@ const App: React.FC = () => {
           answers,
           searchResults,
           darkMode,
-          isSummarized
+          isSummarized,
+          isFirstVisit
         }
       });
     };
 
     saveState();
-  }, [summary, answers, searchResults, darkMode, isSummarized]);
+  }, [summary, answers, searchResults, darkMode, isSummarized, isFirstVisit]);
+
+  const handleGetStarted = () => {
+    setOnboardingStep("features");
+  };
+
+  const handleContinue = () => {
+    setOnboardingStep("complete");
+    setIsFirstVisit(false);
+    // Save to storage that onboarding is complete
+    chrome.storage.local.set({ [`${storageKey}_onboarding_complete`]: true });
+  };
+
+  if (isFirstVisit) {
+    return (
+      <div className="app-container">
+        {darkMode && <div className="fixed-gradient" />}
+        {onboardingStep === "welcome" ? (
+          <WelcomeScreen onGetStarted={handleGetStarted} />
+        ) : onboardingStep === "features" ? (
+          <FeaturesPage onContinue={handleContinue} />
+        ) : null}
+      </div>
+    );
+  }
 
   return (
-    <div className="app-container dark">
+    <div className="app-container">
       {darkMode && <div className="fixed-gradient" />}
       <Header 
         url={url} 
