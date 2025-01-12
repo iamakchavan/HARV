@@ -305,6 +305,9 @@ const App: React.FC = () => {
   }, [selectedImagePreview, selectedImageIndex, answers]);
 
   useEffect(() => {
+    // Initialize dark mode on mount
+    document.documentElement.classList.add('dark');
+    
     const loadState = async () => {
       const tabs = await Browser.tabs.query({ active: true, currentWindow: true });
       const url = tabs[0]?.url;
@@ -320,14 +323,15 @@ const App: React.FC = () => {
         if (tabData.searchResults) setSearchResults(tabData.searchResults);
         if (tabData.darkMode !== undefined) {
           setDarkMode(tabData.darkMode);
-        } else {
-          document.documentElement.classList.add('dark');
+          if (tabData.darkMode) {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
         }
         if (tabData.isSummarized !== undefined) {
           setIsSummarized(tabData.isSummarized);
         }
-      } else {
-        document.documentElement.classList.add('dark');
       }
     };
 
@@ -344,6 +348,15 @@ const App: React.FC = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  // Add effect to handle dark mode changes
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [darkMode]);
 
   useEffect(() => {
     const saveState = async () => {
@@ -367,7 +380,7 @@ const App: React.FC = () => {
   }, [summary, answers, searchResults, darkMode, isSummarized]);
 
   return (
-    <div className={`app-container ${darkMode ? 'dark' : ''}`}>
+    <div className="app-container dark">
       {darkMode && <div className="fixed-gradient" />}
       <Header 
         url={url} 
