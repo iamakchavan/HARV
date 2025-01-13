@@ -15,15 +15,15 @@ export interface AIConfig {
 
 export const AI_CONFIG: AIConfig = {
   xai: {
-    apiKey: 'API_KEY_HERE',
+    apiKey: 'YOUR_XAI_API_KEY',
     endpoint: 'https://api.x.ai/v1'
   },
   gemini: {
-    apiKey: 'API_KEY_HERE',
+    apiKey: 'YOUR_GEMINI_API_KEY',
     model: 'gemini-1.5-flash'
   },
   perplexity: {
-    apiKey: 'API_KEY_HERE',
+    apiKey: 'YOUR_PERPLEXITY_API_KEY',
     model: 'llama-3.1-sonar-small-128k-online'
   }
 };

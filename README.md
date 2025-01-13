@@ -92,7 +92,7 @@ HARV is a powerful browser extension that brings AI-powered assistance directly 
 
 ### Quick Access
 - Use `Alt+X` (Windows/Linux) or `Command+X` (Mac) to open the extension
-- Click the floating search icon for quick access
+- Click the floating search icon for quick access > (coming soon)
 
 ### Search Modes
 1. **Page Mode**: Search within current page content
