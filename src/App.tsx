@@ -321,9 +321,31 @@ const App: React.FC = () => {
       const url = tabs[0]?.url;
       if (!url) return;
       
-      const storageKey = `tab_${url}`;
-      const result = await Browser.storage.session.get([storageKey]);
-      const tabData = result[storageKey];
+      const tabStorageKey = `tab_${url}`;
+      const result = await Browser.storage.session.get([tabStorageKey]);
+      const tabData = result[tabStorageKey];
+
+      // Get the current extension runtime ID
+      const currentRuntimeId = Browser.runtime.id;
+      
+      // Check if stored runtime ID matches current one
+      const storedData = await Browser.storage.local.get(['harv_runtime_id']);
+      const storedRuntimeId = storedData['harv_runtime_id'];
+      
+      // If runtime IDs don't match or no stored ID, treat as fresh install/reload
+      const isNewInstallOrReload = !storedRuntimeId || storedRuntimeId !== currentRuntimeId;
+      
+      if (isNewInstallOrReload) {
+        // Store new runtime ID
+        await Browser.storage.local.set({ 'harv_runtime_id': currentRuntimeId });
+        setIsFirstVisit(true);
+        setOnboardingStep("welcome");
+      } else {
+        // Check if onboarding was completed
+        const onboardingResult = await Browser.storage.local.get(['harv_onboarding_complete']);
+        const hasCompletedOnboarding = onboardingResult['harv_onboarding_complete'];
+        setIsFirstVisit(!hasCompletedOnboarding);
+      }
       
       if (tabData) {
         if (tabData.summary) setSummary(tabData.summary);
@@ -339,9 +361,6 @@ const App: React.FC = () => {
         }
         if (tabData.isSummarized !== undefined) {
           setIsSummarized(tabData.isSummarized);
-        }
-        if (tabData.isFirstVisit !== undefined) {
-          setIsFirstVisit(tabData.isFirstVisit);
         }
       }
     };
@@ -360,6 +379,29 @@ const App: React.FC = () => {
     };
   }, []);
 
+  // Update effect to only save tab-specific data to session storage
+  useEffect(() => {
+    const saveState = async () => {
+      const tabs = await Browser.tabs.query({ active: true, currentWindow: true });
+      const url = tabs[0]?.url;
+      if (!url) return;
+      
+      const storageKey = `tab_${url}`;
+      
+      await Browser.storage.session.set({
+        [storageKey]: {
+          summary,
+          answers,
+          searchResults,
+          darkMode,
+          isSummarized
+        }
+      });
+    };
+
+    saveState();
+  }, [summary, answers, searchResults, darkMode, isSummarized]);
+
   // Add effect to handle dark mode changes
   useEffect(() => {
     if (darkMode) {
@@ -369,28 +411,6 @@ const App: React.FC = () => {
     }
   }, [darkMode]);
 
-  useEffect(() => {
-    const saveState = async () => {
-      const tabs = await Browser.tabs.query({ active: true, currentWindow: true });
-      const url = tabs[0]?.url;
-      if (!url) return;
-      
-      const storageKey = `tab_${url}`;
-      await Browser.storage.session.set({
-        [storageKey]: {
-          summary,
-          answers,
-          searchResults,
-          darkMode,
-          isSummarized,
-          isFirstVisit
-        }
-      });
-    };
-
-    saveState();
-  }, [summary, answers, searchResults, darkMode, isSummarized, isFirstVisit]);
-
   const handleGetStarted = () => {
     setOnboardingStep("features");
   };
@@ -398,8 +418,8 @@ const App: React.FC = () => {
   const handleContinue = () => {
     setOnboardingStep("complete");
     setIsFirstVisit(false);
-    // Save to storage that onboarding is complete
-    chrome.storage.local.set({ [`${storageKey}_onboarding_complete`]: true });
+    // Save to storage that onboarding is complete using global key
+    chrome.storage.local.set({ 'harv_onboarding_complete': true });
   };
 
   if (isFirstVisit) {
