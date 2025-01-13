@@ -11,8 +11,6 @@ import { ModelSelector, type AIModel } from './components/ModelSelector';
 import { setAIModel } from './utils/ai';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Browser from 'webextension-polyfill';
-import { WelcomeScreen } from './components/WelcomeScreen';
-import { FeaturesPage } from './components/FeaturesPage';
 
 interface SearchResult {
   id: string;
@@ -21,8 +19,6 @@ interface SearchResult {
   type: 'search' | 'define' | 'elaborate';
   images?: string[];
 }
-
-type OnboardingStep = "welcome" | "features" | "complete";
 
 const storageKey = 'harv_extension';
 
@@ -57,8 +53,6 @@ const App: React.FC = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [currentImages, setCurrentImages] = useState<string[]>([]);
-  const [isFirstVisit, setIsFirstVisit] = useState(true);
-  const [onboardingStep, setOnboardingStep] = useState<OnboardingStep>("welcome");
 
   const answerRef = useRef<HTMLDivElement>(null);
   const searchAnswerRef = useRef<HTMLDivElement>(null);
@@ -324,28 +318,6 @@ const App: React.FC = () => {
       const tabStorageKey = `tab_${url}`;
       const result = await Browser.storage.session.get([tabStorageKey]);
       const tabData = result[tabStorageKey];
-
-      // Get the current extension runtime ID
-      const currentRuntimeId = Browser.runtime.id;
-      
-      // Check if stored runtime ID matches current one
-      const storedData = await Browser.storage.local.get(['harv_runtime_id']);
-      const storedRuntimeId = storedData['harv_runtime_id'];
-      
-      // If runtime IDs don't match or no stored ID, treat as fresh install/reload
-      const isNewInstallOrReload = !storedRuntimeId || storedRuntimeId !== currentRuntimeId;
-      
-      if (isNewInstallOrReload) {
-        // Store new runtime ID
-        await Browser.storage.local.set({ 'harv_runtime_id': currentRuntimeId });
-        setIsFirstVisit(true);
-        setOnboardingStep("welcome");
-      } else {
-        // Check if onboarding was completed
-        const onboardingResult = await Browser.storage.local.get(['harv_onboarding_complete']);
-        const hasCompletedOnboarding = onboardingResult['harv_onboarding_complete'];
-        setIsFirstVisit(!hasCompletedOnboarding);
-      }
       
       if (tabData) {
         if (tabData.summary) setSummary(tabData.summary);
@@ -410,30 +382,6 @@ const App: React.FC = () => {
       document.documentElement.classList.remove('dark');
     }
   }, [darkMode]);
-
-  const handleGetStarted = () => {
-    setOnboardingStep("features");
-  };
-
-  const handleContinue = () => {
-    setOnboardingStep("complete");
-    setIsFirstVisit(false);
-    // Save to storage that onboarding is complete using global key
-    chrome.storage.local.set({ 'harv_onboarding_complete': true });
-  };
-
-  if (isFirstVisit) {
-    return (
-      <div className="app-container">
-        {darkMode && <div className="fixed-gradient" />}
-        {onboardingStep === "welcome" ? (
-          <WelcomeScreen onGetStarted={handleGetStarted} />
-        ) : onboardingStep === "features" ? (
-          <FeaturesPage onContinue={handleContinue} />
-        ) : null}
-      </div>
-    );
-  }
 
   return (
     <div className="app-container">
