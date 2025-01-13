@@ -52,7 +52,6 @@ HARV is a powerful browser extension that brings AI-powered assistance directly 
 
 2. Install dependencies:
    ```bash
-   cd HARV
    npm install
    ```
 
