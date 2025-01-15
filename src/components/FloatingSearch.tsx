@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Search, X, Globe, Layout, FileText, Loader2, Sparkles, Bot, Image as ImageIcon, Camera, Zap } from 'lucide-react';
+import { Search, X, Globe, Layout, FileText, Loader2, Sparkles, Brain, Image as ImageIcon, Camera, Zap } from 'lucide-react';
 import type { AIModel } from './ModelSelector';
 import { setAIModel } from '../utils/ai';
 import Browser from 'webextension-polyfill';
@@ -99,7 +99,7 @@ export const FloatingSearch: React.FC<FloatingSearchProps> = ({ isSummarized, on
 
   const modelIcons = {
     gemini: <Sparkles className="w-4 h-4" />,
-    perplexity: <Bot className="w-4 h-4" />,
+    perplexity: <Brain className="w-4 h-4" />,
     xai: <Zap className="w-4 h-4" />
   };
 
