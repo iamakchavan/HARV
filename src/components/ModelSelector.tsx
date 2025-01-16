@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronDown, ChevronUp, Sparkles, Brain, Zap } from 'lucide-react';
+import { ChevronDown, ChevronUp, Sparkles, Bot, Zap } from 'lucide-react';
 
 export type AIModel = 'gemini' | 'perplexity' | 'xai';
 
@@ -31,7 +31,7 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
       id: 'perplexity' as AIModel,
       name: 'Perplexity',
       description: 'Llama 3.1 Sonar Small 128k Online',
-      icon: Brain,
+      icon: Bot,
     },
   ];
 

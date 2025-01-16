@@ -18,7 +18,6 @@ interface SearchResult {
   timestamp: number;
   type: 'search' | 'define' | 'elaborate';
   images?: string[];
-  query: string;
 }
 
 const storageKey = 'harv_extension';
@@ -153,8 +152,7 @@ const App: React.FC = () => {
         id: Date.now().toString(),
         content: response,
         timestamp: Date.now(),
-        type: 'search',
-        query: question
+        type: 'search'
       }]);
       setQuestion('');
       scrollToAnswer();
@@ -170,13 +168,12 @@ const App: React.FC = () => {
     }, 100);
   };
 
-  const handleSearch = (answer: string, prompt: string) => {
+  const handleSearch = (answer: string) => {
     const newSearchResult: SearchResult = {
       id: Date.now().toString(),
       content: answer,
       timestamp: Date.now(),
-      type: 'search',
-      query: prompt
+      type: 'search'
     };
     setSearchResults(prev => [...prev, newSearchResult]);
     setAnswerType('search');
@@ -215,8 +212,7 @@ const App: React.FC = () => {
         content: response,
         timestamp: Date.now(),
         type: 'search',
-        images: imagesData,
-        query: cleanQuery
+        images: imagesData
       };
       setAnswers(prev => [...prev, newAnswer]);
       scrollToAnswer();
@@ -464,13 +460,6 @@ const App: React.FC = () => {
               <ContentSection
                 title={`Answer - ${new Date(answer.timestamp).toLocaleTimeString()}`}
                 content={answer.content}
-                isImageResult={answer.images && answer.images.length > 0}
-                originalQuery={answer.query}
-                onContentUpdate={(newContent) => {
-                  setAnswers(prev => prev.map(a => 
-                    a.id === answer.id ? { ...a, content: newContent } : a
-                  ));
-                }}
               />
             </div>
           ))}
@@ -484,13 +473,7 @@ const App: React.FC = () => {
             >
               <ContentSection 
                 title={`Search Result (${new Date(result.timestamp).toLocaleTimeString()})`}
-                content={result.content}
-                originalQuery={result.query}
-                onContentUpdate={(newContent) => {
-                  setSearchResults(prev => prev.map(r => 
-                    r.id === result.id ? { ...r, content: newContent } : r
-                  ));
-                }}
+                content={result.content} 
               />
             </div>
           ))}

@@ -8,7 +8,7 @@ interface SelectionPopupProps {
   onDefine: () => void;
   onExplain: () => void;
   visible: boolean;
-  onSearch: (answer: string, prompt: string) => void;
+  onSearch: (answer: string) => void;
   darkMode: boolean;
 }
 
@@ -91,7 +91,7 @@ Your summary should:
 
     try {
       const answer = await queryGemini(prompt);
-      onSearch(answer, prompt);
+      onSearch(answer);
       scrollToAnswer();
     } catch (error) {
       console.error('Summarize error:', error);
@@ -116,7 +116,7 @@ Your explanation should:
 
     try {
       const answer = await queryGemini(prompt);
-      onSearch(answer, prompt);
+      onSearch(answer);
       scrollToAnswer();
     } catch (error) {
       console.error('Explain error:', error);
