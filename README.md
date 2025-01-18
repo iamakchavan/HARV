@@ -96,7 +96,7 @@ HARV is a powerful browser extension that brings AI-powered assistance directly 
 ### Search Modes
 1. **Page Mode**: Search within current page content
 2. **Domain Mode**: Search across the current website
-3. **All Mode**: Use AI's comprehensive knowledge
+3. **All Mode**: Use AI's comprehensive knowledge & entire internet
 
 ### Text Selection Features
 1. Select any text on a webpage
