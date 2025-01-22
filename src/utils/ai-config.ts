@@ -24,6 +24,6 @@ export const AI_CONFIG: AIConfig = {
   },
   perplexity: {
     apiKey: 'YOUR_PERPLEXITY_API_KEY',
-    model: 'llama-3.1-sonar-small-128k-online'
+    model: 'sonar'
   }
 };
