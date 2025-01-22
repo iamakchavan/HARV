@@ -30,7 +30,7 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
     {
       id: 'perplexity' as AIModel,
       name: 'Perplexity',
-      description: 'Llama 3.1 Sonar Small 128k Online',
+      description: 'sonar by perplexity',
       icon: Brain,
     },
   ];
