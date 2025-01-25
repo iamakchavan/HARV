@@ -86,7 +86,7 @@ HARV is a powerful browser extension that brings AI-powered assistance directly 
 
 
 
-  - **Note:** You can also change the model to any other model supported by Google Gemini, Perplexity & xAI.
+  - ## **Note:** You can also change the model to any other model supported by Google Gemini, Perplexity & xAI.
 
 
 
