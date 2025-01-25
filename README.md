@@ -70,10 +70,19 @@ HARV is a powerful browser extension that brings AI-powered assistance directly 
        },
        perplexity: {
          apiKey: 'YOUR_PERPLEXITY_API_KEY',
-         model: 'sonar'
+         model: 'llama-3.1-sonar-small-128k-online'
        }
      };
      ```
+
+   > ⚠️ **Important Deprecation Notice for Perplexity API**
+   >
+   > Please note that as of February 22, 2025, several models and model name aliases will no longer be accessible. The following model names will no longer be available via API:
+   > - llama-3.1-sonar-small-128k-online
+   > - llama-3.1-sonar-large-128k-online
+   > - llama-3.1-sonar-huge-128k-online
+   >
+   > We recommend updating your applications to use our recently released [Sonar or Sonar Pro models](https://sonar.perplexity.ai/).
 
 4. Build the extension:
    ```bash
