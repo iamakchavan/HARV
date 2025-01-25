@@ -84,7 +84,11 @@ HARV is a powerful browser extension that brings AI-powered assistance directly 
    >
    > We recommend updating your applications to use our recently released [Sonar or Sonar Pro models](https://sonar.perplexity.ai/).
 
+
+
   - **Note:** You can also change the model to any other model supported by Google Gemini, Perplexity & xAI.
+
+
 
 4. Build the extension:
    ```bash
