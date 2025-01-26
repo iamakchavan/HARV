@@ -84,11 +84,13 @@ HARV is a powerful browser extension that brings AI-powered assistance directly 
    >
    > We recommend updating your applications to use our recently released [Sonar or Sonar Pro models](https://sonar.perplexity.ai/).
 
+   #### **Model Configuration Note:**
+   Each AI provider offers different model options that you can configure:
+   - **Gemini**: Supports models like `gemini-1.5-pro`, `gemini-1.5-flash`, and other Google Vertex AI models
+   - **Perplexity**: Use `sonar` for lightweight queries or `sonar-pro` for complex tasks requiring deeper analysis
+   - **xAI**: Currently supports the `grok-beta` model
 
-
-  - #### **Note:** You can also change the model to any other model supported by Google Gemini, Perplexity & xAI.
-
-
+   You can modify these in the `ai-config.ts` file based on your specific needs and API access.
 
 4. Build the extension:
    ```bash
