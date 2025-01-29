@@ -87,7 +87,7 @@ HARV is a powerful browser extension that brings AI-powered assistance directly 
    #### **Model Configuration Note:**
    Each AI provider offers different model options that you can configure:
    - **Gemini**: Supports models like `gemini-1.5-pro`, `gemini-1.5-flash`, and other Google Vertex AI models
-   - **Perplexity**: Use `sonar` for lightweight queries or `sonar-pro` for complex tasks requiring deeper analysis
+   - **Perplexity**: Use `sonar` for lightweight queries or `sonar-pro` for complex tasks requiring deeper analysis and `sonar-reasoning` for reasoning tasks with chain of thought.
    - **xAI**: Currently supports the `grok-beta` model
 
    You can modify these in the `ai-config.ts` file based on your specific needs and API access.
