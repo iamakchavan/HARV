@@ -82,7 +82,7 @@ HARV is a powerful browser extension that brings AI-powered assistance directly 
    > - llama-3.1-sonar-large-128k-online
    > - llama-3.1-sonar-huge-128k-online
    >
-   > We recommend updating your applications to use our recently released [Sonar or Sonar Pro models](https://sonar.perplexity.ai/).
+   > We recommend updating your applications to use the recently released [Sonar, Sonar Pro, Sonar Pro Reasoning and Reasoning Pro models](https://sonar.perplexity.ai/).
 
    #### **Model Configuration Note:**
    Each AI provider offers different model options that you can configure:
