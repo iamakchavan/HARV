@@ -102,7 +102,7 @@ HARV is a powerful browser extension that brings AI-powered assistance directly 
      1. Go to `chrome://extensions/`
      2. Enable "Developer mode"
      3. Click "Load unpacked"
-     4. Select the `dist` folder from the project directory
+     4. Select the `dist` folder from the project directory, and you're good to go.
 
 ## Usage
 
